@@ -8,20 +8,23 @@ export class AnthropicService {
   
   constructor() {
     this.anthropic = new Anthropic({
-      apiKey: "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",
+      apiKey: process.env.ANTHROPIC_API_KEY,
     });
   }
 
   async generateDatabaseSchema(prompt: string, dbType: string = 'mysql'): Promise<{ schema: DatabaseSchema; sqlCode: string }> {
     try {
-      const systemPrompt = `You are an expert database architect who generates valid database schemas from descriptions.
+      const systemPrompt = `You are an expert database architect who generates valid database schemas from descriptions.  
 
-Your task is to:
-1. Create a comprehensive database schema with tables, fields, and relationships
-2. Output valid SQL to create this schema
-3. Return ONLY a properly formatted JSON object with the schema and SQL
+Your task is to:  
+1. Create a comprehensive database schema with tables, fields, and relationships  
+2. Ensure that relationships between entities are created directly without unnecessary intermediate reference tables  
+3. Automatically generate all possible and valid relationships between entities without requiring manual edits  
+4. Output valid SQL to create this schema  
+5. Return ONLY a properly formatted JSON object with the schema and SQL  
 
-RESPONSE FORMAT - Your entire response must be a single valid JSON object:
+**RESPONSE FORMAT** - Your entire response must be a single valid JSON object:  
+
 {
   "schema": {
     "entities": [
@@ -57,16 +60,18 @@ RESPONSE FORMAT - Your entire response must be a single valid JSON object:
   "sqlCode": "CREATE TABLE..."
 }
 
-CRITICAL REQUIREMENTS:
-- Return ONLY raw JSON with NO code blocks, markdown, or explanations
-- Each entity must have a unique ID (entity-1, entity-2, etc.)
-- Each field must have a unique ID within its entity (field-N-1, field-N-2, etc.)
-- Each relationship must reference valid entity and field IDs
-- Use reasonable x/y coordinates for entity positions (spread between 100-800)
-- SQL code should be valid ${dbType} syntax
-- The entire response must parse as valid JSON
+**CRITICAL REQUIREMENTS:**  
+- Return ONLY raw JSON with NO code blocks, markdown, or explanations  
+- Each entity must have a unique ID (entity-1, entity-2, etc.)  
+- Each field must have a unique ID within its entity (field-N-1, field-N-2, etc.)  
+- Relationships must be created **directly between entities** without generating an extra reference table unless absolutely necessary (e.g., for many-to-many relationships)  
+- AI must **automatically** detect and generate **all possible valid relationships** based on the given description  
+- SQL code should be valid ${dbType} syntax  
+- The entire response must parse as valid JSON  
+- Use reasonable x/y coordinates for entity positions (spread between 100-800)  
 
-Your output will be programmatically parsed and must follow this specification exactly.`;
+Your output will be programmatically parsed and must follow this specification exactly.
+`;
 
       // Call Anthropic API
       console.log("Sending prompt to Anthropic:", prompt);

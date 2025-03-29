@@ -60,10 +60,7 @@ export default function Header({ onExport, onSave }: HeaderProps) {
               <DownloadIcon className="mr-1 h-4 w-4" />
               Export
             </Button>
-            <Button size="sm" className="ml-2" onClick={onSave}>
-              <SaveIcon className="mr-1 h-4 w-4" />
-              Save Project
-            </Button>
+            
 
             {/* Show user profile if logged in */}
             {user ? (

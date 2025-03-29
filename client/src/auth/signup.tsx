@@ -11,6 +11,11 @@ import {
   WalletIcon, 
   NetworkIcon 
 } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { FcGoogle } from 'react-icons/fc';
+import app from './firebase_config';
+import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { useLocation } from 'wouter';
 
 // Define interface for Database Type
 interface DatabaseType {
@@ -31,11 +36,31 @@ const AutoDBSignup: React.FC = () => {
   const [selectedDatabase, setSelectedDatabase] = useState<string>('');
   const [databaseGoal, setDatabaseGoal] = useState<string>('');
   const [key, setKey] = useState(0);
+  const [location , setLocation] = useLocation();
+
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
+  
+
+  const handleGoogleLogin = async () =>{
+    try {
+                const result = await signInWithPopup(auth, provider);
+                const user = result.user;
+                console.log("User signed in:", user);
+                // Handle successful login (e.g., redirect or store user info)
+                setLocation('/dashboard')
+    
+            } catch (error) {
+                alert('error occured , try again please')
+                console.error("Error signing in with Google:", error);
+            }
+  }
 
   const databaseTypes: DatabaseType[] = [
     { 
       name: 'E-commerce', 
-      icon: <ShoppingCartIcon className="w-16 h-16 text-emerald-600" />, 
+      icon: <ShoppingCartIcon className=" text-emerald-600" />, 
       description: 'Optimized for online retail management',
       details: [
         'Product Catalog Management',
@@ -59,7 +84,7 @@ const AutoDBSignup: React.FC = () => {
     },
     { 
       name: 'Healthcare', 
-      icon: <HeartPulseIcon className="w-16 h-16 text-red-600" />, 
+      icon: <HeartPulseIcon className=" text-red-600" />, 
       description: 'Secure patient data management',
       details: [
         'Patient Record Tracking',
@@ -83,7 +108,7 @@ const AutoDBSignup: React.FC = () => {
     },
     { 
       name: 'Finance', 
-      icon: <WalletIcon className="w-16 h-16 text-indigo-600" />, 
+      icon: <WalletIcon className=" text-indigo-600" />, 
       description: 'Robust financial transaction tracking',
       details: [
         'Transaction Logging',
@@ -107,7 +132,7 @@ const AutoDBSignup: React.FC = () => {
     },
     { 
       name: 'Social Media', 
-      icon: <NetworkIcon className="w-16 h-16 text-purple-600" />, 
+      icon: <NetworkIcon className=" text-purple-600" />, 
       description: 'Scalable user interaction tracking',
       details: [
         'User Profile Management',
@@ -142,9 +167,17 @@ const AutoDBSignup: React.FC = () => {
     }
   }, [selectedDatabase, name]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted', { name, email, selectedDatabase });
+    try {
+          const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+          const user = userCredential.user;
+          console.log("User signed in:", user);
+          setLocation('/dashboard');
+        } catch(error){
+          alert('error occured , try again please')
+          console.error("Error signing in with Google:", error);
+        };
   };
 
   return (
@@ -203,6 +236,30 @@ const AutoDBSignup: React.FC = () => {
               </div>
             </div>
 
+            <Button 
+              type="submit" 
+              className="w-[100%] h-10  bg-gradient-to-r from-emerald-500 to-emerald-600 text-white hover:from-emerald-600 hover:to-emerald-700 transition duration-300 transform hover:scale-[1.02] shadow-md hover:shadow-lg"
+            >
+              Create Account
+            </Button>
+
+            <div className='flex justify-center items-center'>
+              or
+            </div>
+
+            <div>
+            <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handleGoogleLogin}
+                  type="button"
+                  className="w-full flex items-center justify-center space-x-3 py-3 lg:py-4 border-2 border-gray-200 rounded-xl hover:bg-gray-50 text-sm lg:text-base transition-all duration-300"
+                >
+                  <FcGoogle className="w-5 h-5 lg:w-6 lg:h-6" />
+                  <span className="font-medium text-gray-700">Continue with Google</span>
+                </motion.button>
+            </div>
+
             <p className="text-sm text-gray-600 mb-2">
               Choose what you want to start with:
             </p>
@@ -225,12 +282,7 @@ const AutoDBSignup: React.FC = () => {
               ))}
             </div>
 
-            <Button 
-              type="submit" 
-              className="w-[100%] h-10 -ml-[5%] bg-gradient-to-r from-emerald-500 to-emerald-600 text-white hover:from-emerald-600 hover:to-emerald-700 transition duration-300 transform hover:scale-[1.02] shadow-md hover:shadow-lg"
-            >
-              Create Account
-            </Button>
+            
           </form>
         </div>
 

@@ -1,184 +1,176 @@
 import React from 'react';
-import { Github, Linkedin, Twitter, Send } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { 
+  Twitter, 
+  Linkedin, 
+  Github, 
+  Instagram, 
+  Mail, 
+  MapPin, 
+  Phone 
+} from 'lucide-react';
 
-const Footer: React.FC = () => {
+const AutoDBFooter = () => {
+  const socialLinks = [
+    { 
+      Icon: Twitter, 
+      href: "https://twitter.com/autodb", 
+      color: "hover:text-blue-400" 
+    },
+    { 
+      Icon: Linkedin, 
+      href: "https://linkedin.com/company/autodb", 
+      color: "hover:text-blue-600" 
+    },
+    { 
+      Icon: Github, 
+      href: "https://github.com/autodb", 
+      color: "hover:text-gray-200" 
+    },
+    { 
+      Icon: Instagram, 
+      href: "https://instagram.com/autodb", 
+      color: "hover:text-pink-500" 
+    }
+  ];
+
+  const footerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { 
+      y: 0, 
+      opacity: 1,
+      transition: { duration: 0.6 }
+    }
+  };
+
   return (
-    <footer className="relative bg-gradient-to-br from-indigo-50 via-white to-blue-50 py-16 overflow-hidden">
-      {/* Subtle Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-100/20 to-purple-100/20 opacity-50 pointer-events-none"></div>
-      
-      {/* Decorative Blob Shapes */}
-      <div className="absolute -top-20 -left-20 w-96 h-96 bg-blue-100/30 rounded-full blur-3xl animate-blob"></div>
-      <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-purple-100/30 rounded-full blur-3xl animate-blob animation-delay-4000"></div>
-      
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="grid md:grid-cols-3 gap-12 mb-12">
-          {/* Product Information */}
-          <div className="space-y-6 transform transition-all duration-300 hover:scale-[1.02]">
-            <div className="flex items-center space-x-4">
-              <div className="bg-gradient-to-br from-blue-500 to-purple-600 p-3 rounded-xl shadow-lg">
-                <Send className="text-white w-8 h-8" />
-              </div>
-              <h4 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">AutoDB</h4>
-            </div>
-            <p className="text-gray-600 leading-relaxed">
-              Revolutionizing database design through AI-powered automation. Create, optimize, and manage your databases with unprecedented intelligence and ease.
+    <footer className="bg-black text-white relative overflow-hidden">
+      {/* Animated Geometric Background */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute w-[200%] h-[200%] bg-gradient-to-r from-white via-gray-700 to-white animate-slow-spin origin-center"></div>
+      </div>
+
+      {/* Main Footer Content */}
+      <motion.div 
+        className="container mx-auto px-6 py-16 relative z-10"
+        initial="hidden"
+        whileInView="visible"
+        variants={footerVariants}
+      >
+        <div className="grid md:grid-cols-4 gap-8">
+          {/* Company Info */}
+          <motion.div variants={itemVariants}>
+            <h2 className="text-4xl font-bold mb-4 text-white/90">AutoDB</h2>
+            <p className="text-gray-300 mb-6">
+              Revolutionizing database generation with cutting-edge AI technology.
             </p>
-            <div className="flex space-x-3">
-              {[
-                { Icon: Github, href: "https://github.com/autodb", color: "hover:text-black" },
-                { Icon: Linkedin, href: "https://linkedin.com/company/autodb", color: "hover:text-blue-700" },
-                { Icon: Twitter, href: "https://twitter.com/autodb", color: "hover:text-blue-400" }
-              ].map(({ Icon, href, color }, index) => (
+            
+            {/* Social Icons */}
+            <div className="flex space-x-4">
+              {socialLinks.map(({ Icon, href, color }) => (
                 <a 
-                  key={index}
-                  href={href}
-                  target="_blank"
+                  key={href} 
+                  href={href} 
+                  target="_blank" 
                   rel="noopener noreferrer"
-                  className={`
-                    text-gray-500 ${color} 
-                    transition-all duration-300 
-                    transform hover:scale-110 hover:rotate-6
-                    bg-white/50 hover:bg-white/80 
-                    p-3 rounded-full shadow-md
-                  `}
+                  className={`transition-all duration-300 ${color} transform hover:scale-125`}
                 >
-                  <Icon className="w-6 h-6" />
+                  <Icon size={24} />
                 </a>
               ))}
             </div>
-          </div>
+          </motion.div>
 
           {/* Quick Links */}
-          <div className="space-y-6 transform transition-all duration-300 hover:scale-[1.02]">
-            <h4 className="text-xl font-semibold text-gray-800 mb-6 border-b-2 border-blue-500 pb-2">
-              Quick Navigation
-            </h4>
-            <ul className="space-y-4">
+          <motion.div variants={itemVariants}>
+            <h3 className="text-xl font-semibold mb-6">Explore</h3>
+            <ul className="space-y-3">
               {[
-                "Features", "Pricing", "Documentation", 
-                "AI Database Generator", "ER Diagram Tool"
-              ].map((link, index) => (
-                <li key={index}>
+                { name: "Product", href: "#product" },
+                { name: "Solutions", href: "#solutions" },
+                { name: "Pricing", href: "#pricing" },
+                { name: "Documentation", href: "#docs" }
+              ].map(({ name, href }) => (
+                <li key={name}>
                   <a 
-                    href="#" 
-                    className="
-                      text-gray-600 
-                      hover:text-transparent 
-                      hover:bg-clip-text 
-                      hover:bg-gradient-to-r 
-                      from-blue-600 to-purple-600 
-                      transition-all 
-                      duration-300 
-                      flex 
-                      items-center 
-                      group
-                    "
+                    href={href} 
+                    className="text-gray-300 hover:text-white transition-colors"
                   >
-                    <span className="mr-2 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-                    {link}
+                    {name}
                   </a>
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
-          {/* Contact and Newsletter */}
-          <div className="space-y-6 transform transition-all duration-300 hover:scale-[1.02]">
-            <h4 className="text-xl font-semibold text-gray-800 mb-6 border-b-2 border-purple-500 pb-2">
-              Stay Connected
-            </h4>
-            <div className="bg-white/60 p-6 rounded-xl shadow-lg">
-              <div className="flex mb-4">
-                <input 
-                  type="email" 
-                  placeholder="Enter your email" 
-                  className="
-                    w-full 
-                    px-4 py-2 
-                    border 
-                    border-gray-200 
-                    rounded-l-lg 
-                    focus:outline-none 
-                    focus:ring-2 
-                    focus:ring-blue-500
-                  "
-                />
-                <button 
-                  className="
-                    bg-gradient-to-r 
-                    from-blue-500 
-                    to-purple-600 
-                    text-white 
-                    px-4 
-                    rounded-r-lg 
-                    hover:from-blue-600 
-                    hover:to-purple-700 
-                    transition-all 
-                    duration-300
-                  "
-                >
-                  <Send className="w-5 h-5" />
-                </button>
-              </div>
-              <p className="text-xs text-gray-500 text-center">
-                Subscribe for AI database insights and updates
-              </p>
-            </div>
-            <p className="text-gray-600 text-sm mt-4">
-              Contact: support@autodb.ai
-            </p>
-          </div>
+          {/* Resources */}
+          <motion.div variants={itemVariants}>
+            <h3 className="text-xl font-semibold mb-6">Resources</h3>
+            <ul className="space-y-3">
+              {[
+                { name: "Blog", href: "#blog" },
+                { name: "Case Studies", href: "#cases" },
+                { name: "Webinars", href: "#webinars" },
+                { name: "Support", href: "#support" }
+              ].map(({ name, href }) => (
+                <li key={name}>
+                  <a 
+                    href={href} 
+                    className="text-gray-300 hover:text-white transition-colors"
+                  >
+                    {name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+
+          {/* Contact Info */}
+          <motion.div variants={itemVariants}>
+            <h3 className="text-xl font-semibold mb-6">Contact</h3>
+            <ul className="space-y-4">
+              <li className="flex items-center space-x-3">
+                <Mail size={20} className="text-gray-400" />
+                <span>support@autodb.ai</span>
+              </li>
+              <li className="flex items-center space-x-3">
+                <Phone size={20} className="text-gray-400" />
+                <span>+1 (555) AUTO-DB</span>
+              </li>
+              <li className="flex items-center space-x-3">
+                <MapPin size={20} className="text-gray-400" />
+                <span>San Francisco, CA</span>
+              </li>
+            </ul>
+          </motion.div>
         </div>
 
-        {/* Copyright Section */}
-        <div className="
-          border-t 
-          border-gray-200/50 
-          pt-8 
-          mt-12 
-          text-center 
-          relative 
-          before:absolute 
-          before:inset-x-0 
-          before:top-0 
-          before:h-[1px] 
-          before:bg-gradient-to-r 
-          before:from-transparent 
-          before:via-blue-500/50 
-          before:to-transparent
-        ">
-          <p className="text-gray-600 text-sm mb-4">
-            © 2024 AutoDB. All Rights Reserved.
+        {/* Footer Bottom */}
+        <motion.div 
+          className="mt-12 pt-6 border-t border-white/10 text-center"
+          variants={itemVariants}
+        >
+          <p className="text-gray-400">
+            ©️ {new Date().getFullYear()} AutoDB. All Rights Reserved.
+            <span className="ml-4 text-sm">
+              Powered by AI Innovation
+            </span>
           </p>
-          <div className="flex justify-center space-x-6">
-            <a 
-              href="#" 
-              className="
-                text-gray-500 
-                hover:text-blue-600 
-                text-sm 
-                transition-colors
-              "
-            >
-              Privacy Policy
-            </a>
-            <a 
-              href="#" 
-              className="
-                text-gray-500 
-                hover:text-blue-600 
-                text-sm 
-                transition-colors
-              "
-            >
-              Terms of Service
-            </a>
-          </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </footer>
   );
 };
 
-export default Footer;
+export default AutoDBFooter;

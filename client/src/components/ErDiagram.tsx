@@ -337,7 +337,7 @@ function ErDiagramContent({ schema, onUpdateSchema, onEditEntity }: ErDiagramPro
         targetEntityId: targetEntity.id,
         sourceFieldId: sourceField.id,
         targetFieldId: targetField.id,
-        type: 'One-to-Many', // Default relationship type
+        
       };
 
       const updatedRelationships = [

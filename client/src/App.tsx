@@ -9,7 +9,9 @@ import ApiKeyModal from "@/components/ApiKeyModal";
 import landingpage from "./landing_page/landingpage";
 import LoginPage from "./auth/login";
 import AutoDBDashboard from "./pages/dashboard";
-import ProblemRealizationSection from "./components/features";
+import SchemaDashboard from "./pages/dashboard2";
+import ProjectView from "./pages/projectview";
+
 import AutoDBSignup from "./auth/signup";
 function Router() {
   return (
@@ -17,8 +19,8 @@ function Router() {
       <Route path="/" component={landingpage} />
       <Route path="/home" component={Home} />
       <Route path="/auth" component={LoginPage} />
-      <Route path="/dashboard" component={AutoDBDashboard} />
-      <Route path="/feature" component={ProblemRealizationSection} />
+      <Route path="/dashboard" component={SchemaDashboard} />
+      <Route path="/project/:projectId" component={ProjectView} />
       <Route path="/signup" component={AutoDBSignup} />
       
       <Route component={NotFound} />
