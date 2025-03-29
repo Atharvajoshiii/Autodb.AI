@@ -60,7 +60,7 @@ After running the above command, **both the client and server will start automat
 
 ## 📸 Screenshots
 ### AI-Generated Database Schema
-![AI Generated Schema](workspace.png)
+![AI Generated Schema](images/workspace.png)
 
 ### Dashboard
 ![Dashboard](images/projects.png)
