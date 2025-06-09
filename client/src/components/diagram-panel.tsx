@@ -16,7 +16,6 @@ import ReactFlow, {
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { Button } from '@/components/ui/button';
-import { ERDiagram, Entity, Field, Relationship } from '@shared/types';
 import { ZoomIn, ZoomOut, Maximize, Plus, Link, Undo, Redo } from 'lucide-react';
 import { convertERDiagramToFlow, convertFlowToERDiagram, createNewEntity } from '@/lib/utils/er-diagram';
 
@@ -55,6 +54,43 @@ interface DiagramPanelProps {
   isMobile?: boolean;
 }
 
+// Local type definitions
+export interface Field {
+  id: string;
+  name: string;
+  type: string;
+  isPrimaryKey: boolean;
+  isForeignKey: boolean;
+  isNotNull?: boolean;
+  isUnique?: boolean;
+  defaultValue?: string | null;
+  references?: {
+    table: string;
+    field: string;
+  };
+}
+
+export interface Entity {
+  id: string;
+  name: string;
+  fields: Field[];
+  position: { x: number; y: number };
+}
+
+export interface Relationship {
+  id: string;
+  sourceEntityId: string;
+  sourceFieldId: string;
+  targetEntityId: string;
+  targetFieldId: string;
+  type: string;
+}
+
+export interface ERDiagram {
+  entities: Entity[];
+  relationships: Relationship[];
+}
+
 export function DiagramPanel({ 
   diagram, 
   onChange, 
@@ -89,8 +125,8 @@ export function DiagramPanel({
     
     // Save current state to undo stack before making changes
     const nodesWithNewPositions = flowInstance.getNodes().map(node => {
-      const change = changes.find(c => c.id === node.id && c.type === 'position');
-      if (change && 'position' in change) {
+      const change = changes.find(c => 'id' in c && c.id === node.id && c.type === 'position');
+      if (change && 'position' in change && change.position) {
         return {
           ...node,
           position: change.position,
@@ -99,7 +135,9 @@ export function DiagramPanel({
       return node;
     });
     
-    const newDiagram = convertFlowToERDiagram(nodesWithNewPositions, flowInstance.getEdges());
+    // Ensure all node positions are defined
+    const validNodes = nodesWithNewPositions.filter(n => n.position);
+    const newDiagram = convertFlowToERDiagram(validNodes as Node[], flowInstance.getEdges()) as ERDiagram;
     onChange(newDiagram);
   }, [diagram, flowInstance, onChange]);
   

@@ -1,5 +1,4 @@
 import Anthropic from '@anthropic-ai/sdk';
-import { DatabaseSchema } from '@shared/types';
 
 // the newest Anthropic model is "claude-3-7-sonnet-20250219" which was released February 24, 2025
 
@@ -467,5 +466,48 @@ Your output will be programmatically parsed and must follow this specification e
     }
   }
 }
+
+// --- Local type definitions (copied from shared/types.ts) ---
+export interface Field {
+  id: string;
+  name: string;
+  type: string;
+  isPrimaryKey: boolean;
+  isForeignKey: boolean;
+  isNotNull: boolean;
+  isUnique: boolean;
+  defaultValue: string | null;
+  references?: {
+    table: string;
+    field: string;
+  };
+}
+
+export interface Entity {
+  id: string;
+  name: string;
+  fields: Field[];
+  position: { x: number; y: number };
+}
+
+export interface Relationship {
+  id: string;
+  sourceEntityId: string;
+  sourceFieldId: string;
+  targetEntityId: string;
+  targetFieldId: string;
+  type: string;
+}
+
+export interface DatabaseSchema {
+  entities: Entity[];
+  relationships: Relationship[];
+}
+
+export interface GenerateSchemaResponse {
+  schema: DatabaseSchema;
+  sqlCode: string;
+}
+// --- End local type definitions ---
 
 export default AnthropicService;

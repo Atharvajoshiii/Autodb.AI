@@ -5,8 +5,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { X, Plus, Trash2 } from "lucide-react";
-import { Entity, Field, DatabaseSchema } from "@shared/types";
 import { v4 as uuidv4 } from "uuid";
+import type { Field, Entity, DatabaseSchema } from "@/types/er";
 
 interface EntityModalProps {
   schema: DatabaseSchema;

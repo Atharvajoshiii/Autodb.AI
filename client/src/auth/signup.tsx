@@ -358,7 +358,16 @@ const AutoDBSignup: React.FC = () => {
                   wrapper="span"
                   cursor={true}
                   repeat={0}
-                  style={{ display: 'inline-block', color: databaseTypes.find(db => db.name === selectedDatabase)?.icon.props.className.match(/text-[a-z]+-600/)[0] }}
+                  style={{
+                    display: 'inline-block',
+                    color:
+                      databaseTypes.find(db => db.name === selectedDatabase)?.icon &&
+                      typeof databaseTypes.find(db => db.name === selectedDatabase)?.icon === 'object' &&
+                      'props' in (databaseTypes.find(db => db.name === selectedDatabase)?.icon as any) &&
+                      typeof (databaseTypes.find(db => db.name === selectedDatabase)?.icon as any).props.className === 'string'
+                        ? ((databaseTypes.find(db => db.name === selectedDatabase)?.icon as any).props.className.match(/text-[a-z]+-600/)?.[0] ?? '#333')
+                        : '#333'
+                  }}
                 />
               </div>
             </div>

@@ -1,4 +1,4 @@
-import { Entity, Field, Relationship, DatabaseSchema } from '@shared/types';
+import type { Field, Entity, Relationship, DatabaseSchema } from "@/types/er";
 
 /**
  * Parses SQL schema string to extract entities and their fields

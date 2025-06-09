@@ -9,11 +9,11 @@ interface ToastProps {
 }
 
 export default function Toast({ type, title, message, id }: ToastProps) {
-  const { toast } = useToast();
+  const { dismiss } = useToast();
 
   const handleDismiss = () => {
     if (id) {
-      toast.dismiss(id);
+      dismiss(id);
     }
   };
 

@@ -1,5 +1,42 @@
-import { ERDiagram, Entity, Field, Relationship } from '@shared/types';
-import { Node, Edge, Position } from 'reactflow';
+// Local type definitions
+export interface Field {
+  id: string;
+  name: string;
+  type: string;
+  isPrimaryKey: boolean;
+  isForeignKey: boolean;
+  isNotNull?: boolean;
+  isUnique?: boolean;
+  defaultValue?: string | null;
+  constraints?: string[];
+  references?: {
+    table: string;
+    field: string;
+  };
+}
+
+export interface Entity {
+  id: string;
+  name: string;
+  fields: Field[];
+  position: { x: number; y: number };
+}
+
+export interface Relationship {
+  id: string;
+  sourceEntityId: string;
+  sourceFieldId: string;
+  targetEntityId: string;
+  targetFieldId: string;
+  type: string;
+}
+
+export interface ERDiagram {
+  entities: Entity[];
+  relationships: Relationship[];
+}
+
+import { Node, Edge, Position, MarkerType } from 'reactflow';
 
 /**
  * Converts an ER diagram to React Flow nodes and edges
@@ -19,36 +56,36 @@ export function convertERDiagramToFlow(diagram: ERDiagram): { nodes: Node[], edg
   
   // Create edges
   const edges: Edge[] = relationships.map(relationship => {
-    const sourceEntity = entities.find(e => e.id === relationship.sourceId);
-    const targetEntity = entities.find(e => e.id === relationship.targetId);
+    const sourceEntity = entities.find(e => e.id === relationship.sourceEntityId);
+    const targetEntity = entities.find(e => e.id === relationship.targetEntityId);
     
     const sourcePosition = Position.Right;
     const targetPosition = Position.Left;
     
     // Determine edge style based on relationship type
-    let markerEnd = { type: 'arrow' };
+    let markerEnd = { type: MarkerType.ArrowClosed };
     let style = {};
     
     if (relationship.type === 'one-to-many') {
-      markerEnd = { type: 'arrow', width: 20, height: 20 };
+      markerEnd = { type: MarkerType.ArrowClosed };
       style = { strokeWidth: 2 };
     } else if (relationship.type === 'many-to-many') {
-      markerEnd = { type: 'arrow', width: 20, height: 20 };
+      markerEnd = { type: MarkerType.ArrowClosed };
       style = { strokeWidth: 2, strokeDasharray: '5,5' };
     }
     
     return {
       id: relationship.id,
-      source: relationship.sourceId,
-      target: relationship.targetId,
-      sourceHandle: relationship.sourceField,
-      targetHandle: relationship.targetField,
+      source: relationship.sourceEntityId,
+      target: relationship.targetEntityId,
+      sourceHandle: relationship.sourceFieldId,
+      targetHandle: relationship.targetFieldId,
       type: 'smoothstep',
       animated: false,
       markerEnd,
       style,
       data: { relationship }
-    };
+    } as Edge;
   });
   
   return { nodes, edges };
@@ -162,26 +199,26 @@ export function createNewField(
 
 /**
  * Creates a new relationship between entities
- * @param sourceId The source entity ID
- * @param targetId The target entity ID
- * @param sourceField The source field
- * @param targetField The target field
+ * @param sourceEntityId The source entity ID
+ * @param targetEntityId The target entity ID
+ * @param sourceFieldId The source field
+ * @param targetFieldId The target field
  * @param type The relationship type
  * @returns A new relationship object
  */
 export function createNewRelationship(
-  sourceId: string,
-  targetId: string,
-  sourceField: string,
-  targetField: string,
-  type: 'one-to-one' | 'one-to-many' | 'many-to-many'
+  sourceEntityId: string,
+  targetEntityId: string,
+  sourceFieldId: string,
+  targetFieldId: string,
+  type: string
 ): Relationship {
   return {
     id: `relationship-${Date.now()}`,
-    sourceId,
-    targetId,
-    sourceField,
-    targetField,
+    sourceEntityId,
+    sourceFieldId,
+    targetEntityId,
+    targetFieldId,
     type
   };
 }

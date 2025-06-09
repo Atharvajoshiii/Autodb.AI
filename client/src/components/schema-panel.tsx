@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { CodeBlock } from '@/components/ui/code-block';
-import { DbType } from '@shared/types';
 import { CheckCircle, Download, Clipboard } from 'lucide-react';
 import { convertERToSchema } from '@/lib/utils/schema-parser';
 import { useToast } from '@/hooks/use-toast';
+
+// Define DbType locally
+export type DbType = 'PostgreSQL' | 'MySQL' | 'SQLite';
 
 interface SchemaPanelProps {
   schema: string;

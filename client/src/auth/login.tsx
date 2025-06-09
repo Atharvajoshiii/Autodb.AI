@@ -10,26 +10,25 @@ import { getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopu
 import { useLocation } from 'wouter';
 
 const LoginPage = () => {
-  const [location , setLocation] = useLocation();
+  const [location, setLocation] = useLocation();
   const provider = new GoogleAuthProvider();
-  const auth = getAuth(app)
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [activeField, setActiveField] = useState(null);
+  const auth = getAuth(app);
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [activeField, setActiveField] = useState<'email' | 'password' | null>(null);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       console.log("User signed in:", user);
       setLocation('/dashboard');
-    } catch(error){
-      alert('error occured , try again please')
-      console.error("Error signing in with Google:", error);
-    };
-    
+    } catch (error: any) {
+      alert('error occured , try again please');
+      console.error("Error signing in:", error);
+    }
   };
 
   const handleGoogleLogin = async () => {
@@ -37,9 +36,9 @@ const LoginPage = () => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       console.log("User signed in:", user);
-      setLocation('/dashboard')
-    } catch (error) {
-      alert('error occured , try again please')
+      setLocation('/dashboard');
+    } catch (error: any) {
+      alert('error occured , try again please');
       console.error("Error signing in with Google:", error);
     }
   };

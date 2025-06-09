@@ -1,4 +1,4 @@
-// Database entity types
+// Canonical ER diagram types for client
 export interface Field {
   id: string;
   name: string;
@@ -7,7 +7,7 @@ export interface Field {
   isForeignKey: boolean;
   isNotNull: boolean;
   isUnique: boolean;
-  defaultValue: string | null;
+  defaultValue?: string | null;
   references?: {
     table: string;
     field: string;
@@ -35,15 +35,7 @@ export interface DatabaseSchema {
   relationships: Relationship[];
 }
 
-// Request/Response types
-export interface GenerateSchemaRequest {
-  prompt: string;
-  dbType: string;
-}
-
 export interface GenerateSchemaResponse {
   schema: DatabaseSchema;
   sqlCode: string;
 }
-
-export type DbType = 'PostgreSQL' | 'MySQL' | 'SQLite';

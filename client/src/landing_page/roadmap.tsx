@@ -41,7 +41,7 @@ const AIDbRoadmap = () => {
       setActiveStep((prevStep) => (prevStep + 1) % roadmapSteps.length);
     }, 3000);
 
-    const handleMouseMove = (e) => {
+    const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
 

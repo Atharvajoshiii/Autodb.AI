@@ -1,6 +1,5 @@
 import { users, type User, type InsertUser } from "@shared/schema";
 import { projects, type Project, type InsertProject } from "@shared/schema";
-import { DatabaseSchema } from "@shared/types";
 
 export interface IStorage {
   // User methods
@@ -43,7 +42,11 @@ export class MemStorage implements IStorage {
 
   async createUser(insertUser: InsertUser): Promise<User> {
     const id = this.userIdCounter++;
-    const user: User = { ...insertUser, id };
+    const user: User = { 
+      ...insertUser, 
+      id, 
+      apiKey: insertUser.apiKey ?? null // Ensure apiKey is always present
+    };
     this.users.set(id, user);
     return user;
   }
@@ -73,6 +76,14 @@ export class MemStorage implements IStorage {
     const project: Project = {
       ...insertProject,
       id,
+      name: insertProject.name,
+      userId: insertProject.userId ?? null,
+      description: insertProject.description ?? null,
+      prompt: insertProject.prompt ?? null,
+      dbType: insertProject.dbType ?? null,
+      entities: insertProject.entities,
+      relationships: insertProject.relationships,
+      sqlSchema: insertProject.sqlSchema ?? null,
       createdAt: now,
       updatedAt: now,
     };
@@ -98,5 +109,53 @@ export class MemStorage implements IStorage {
     return this.projects.delete(id);
   }
 }
+
+// --- Local type definitions (copied from shared/types.ts) ---
+export interface Field {
+  id: string;
+  name: string;
+  type: string;
+  isPrimaryKey: boolean;
+  isForeignKey: boolean;
+  isNotNull: boolean;
+  isUnique: boolean;
+  defaultValue: string | null;
+  references?: {
+    table: string;
+    field: string;
+  };
+}
+
+export interface Entity {
+  id: string;
+  name: string;
+  fields: Field[];
+  position: { x: number; y: number };
+}
+
+export interface Relationship {
+  id: string;
+  sourceEntityId: string;
+  sourceFieldId: string;
+  targetEntityId: string;
+  targetFieldId: string;
+  type: string;
+}
+
+export interface DatabaseSchema {
+  entities: Entity[];
+  relationships: Relationship[];
+}
+
+export interface GenerateSchemaRequest {
+  prompt: string;
+  dbType: string;
+}
+
+export interface GenerateSchemaResponse {
+  schema: DatabaseSchema;
+  sqlCode: string;
+}
+// --- End local type definitions ---
 
 export const storage = new MemStorage();

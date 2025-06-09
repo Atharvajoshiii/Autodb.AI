@@ -18,8 +18,8 @@ import ReactFlow, {
 import "reactflow/dist/style.css";
 import { Button } from "@/components/ui/button";
 import { PlusIcon, KeyRound, Link, X } from "lucide-react";
-import { Entity, Relationship, Field, DatabaseSchema } from "@shared/types";
 import { v4 as uuidv4 } from "uuid";
+import type { Field, Entity, Relationship, DatabaseSchema } from "@/types/er";
 
 // Custom Node Component for Entity Tables
 function EntityNode({ data, selected }: any) {
@@ -55,7 +55,7 @@ function EntityNode({ data, selected }: any) {
         </div>
       </div>
       <ul className="text-sm divide-y divide-neutral-100">
-        {entity.fields.map((field) => (
+        {entity.fields.map((field: Field) => (
           <li key={field.id} className="px-3 py-1.5 flex items-center">
             <span className="w-4 h-4 mr-2 flex-shrink-0">
               {field.isPrimaryKey && <KeyRound className="h-3 w-3 text-secondary-500" />}
@@ -301,14 +301,14 @@ function ErDiagramContent({ schema, onUpdateSchema, onEditEntity }: ErDiagramPro
   };
 
   // Handle connection start
-  const onConnectStart = useCallback((event: React.MouseEvent, params: any) => {
+  const onConnectStart = useCallback((event: React.MouseEvent<Element, MouseEvent> | React.TouchEvent<Element>, params: { nodeId?: string | null }) => {
+    if (!params.nodeId) return;
     const sourceNode = reactFlowInstance.getNode(params.nodeId);
     if (sourceNode) {
       const sourceEntity = sourceNode.data.entity;
       const sourceField = sourceEntity.fields.find((f: Field) => 
         f.isPrimaryKey || f.isForeignKey
       );
-      
       setSelectedConnection({
         sourceEntityId: sourceEntity.id,
         sourceFieldId: sourceField ? sourceField.id : null
@@ -337,7 +337,7 @@ function ErDiagramContent({ schema, onUpdateSchema, onEditEntity }: ErDiagramPro
         targetEntityId: targetEntity.id,
         sourceFieldId: sourceField.id,
         targetFieldId: targetField.id,
-        
+        type: '1:N', // Default type
       };
 
       const updatedRelationships = [

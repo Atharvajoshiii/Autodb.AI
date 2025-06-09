@@ -2,7 +2,6 @@ import { useState, useCallback } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import { DatabaseSchema, Entity, Relationship, GenerateSchemaResponse } from "@shared/types";
 import { v4 as uuidv4 } from "uuid";
 import { convertERToSchema } from "@/lib/utils/schema-parser";
 import { User } from "firebase/auth";
@@ -12,9 +11,9 @@ import {
   collection, 
   addDoc, 
   serverTimestamp, 
-  DocumentReference,
-  FirebaseFirestore
+  DocumentReference
 } from "firebase/firestore";
+import type { Field, Entity, Relationship, DatabaseSchema, GenerateSchemaResponse } from "@/types/er";
 
 // Define interface for Firestore schema document
 interface SchemaDocument {

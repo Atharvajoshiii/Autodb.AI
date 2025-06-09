@@ -3,12 +3,28 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Entity, Field } from '@shared/types';
 import { Separator } from '@/components/ui/separator';
 import { Pencil, Trash2, Plus } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { v4 as uuidv4 } from 'uuid';
+
+// Local type definitions
+export interface Field {
+  id: string;
+  name: string;
+  type: string;
+  isPrimaryKey: boolean;
+  isForeignKey: boolean;
+  constraints: string[];
+}
+
+export interface Entity {
+  id: string;
+  name: string;
+  fields: Field[];
+  position?: { x: number; y: number };
+}
 
 interface FieldEditorProps {
   field: Field;

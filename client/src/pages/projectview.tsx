@@ -7,10 +7,12 @@ import { useSchema } from "@/hooks/useSchema";
 import { useToast } from "@/hooks/use-toast";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { useParams, useNavigate } from "react-router-dom";
-import { DatabaseSchema } from "@shared/types";
 import { useLocation, useRoute } from "wouter";
 import { getAuth } from "firebase/auth";
 import app from "@/auth/firebase_config";
+import type { Field, Entity, Relationship, DatabaseSchema } from "@/types/er";
+
+// Remove local type definitions for Field, Entity, Relationship, DatabaseSchema
 
 export default function ProjectView() {
   // Initialize toast notification hook
@@ -185,7 +187,6 @@ export default function ProjectView() {
             description: "Project update functionality will be available soon",
           });
         }}
-        showPromptInput={false}
       />
       
       <div className="flex-1 overflow-hidden flex flex-col md:flex-row">
