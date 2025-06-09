@@ -5,6 +5,6 @@ server/public
 vite.config.ts.*
 *.tar.gz
 .replit
-.env
+.env*
 
 
