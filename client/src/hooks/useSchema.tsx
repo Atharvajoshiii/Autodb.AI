@@ -13,6 +13,7 @@ import {
   serverTimestamp, 
   DocumentReference
 } from "firebase/firestore";
+import app from "@/auth/firebase_config";
 import type { Field, Entity, Relationship, DatabaseSchema, GenerateSchemaResponse } from "@/types/er";
 
 // Define interface for Firestore schema document
@@ -37,8 +38,8 @@ export function useSchema() {
   const getApiKey = (): string | null => localStorage.getItem("anthropic_api_key");
 
   // Get current user and Firestore instance with explicit typing
-  const auth = getAuth();
-  const firestore = getFirestore();
+  const auth = getAuth(app);
+  const firestore = getFirestore(app);
 
   // Store schema in Firestore with robust type checking
   const storeSchemaInFirestore = async (
